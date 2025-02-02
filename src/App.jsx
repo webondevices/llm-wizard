@@ -7,6 +7,7 @@ import { LLMPage } from './LLMPage/LLMPage';
 import { LLMTailwind } from './LLMTailwind/LLMTailwind';
 
 import "tailwindcss/index.css";
+import Todo from './Todo/Todo';
 
 function App() {
   const [toggle, setToggle] = useState(false);
@@ -26,11 +27,12 @@ function App() {
         data={{}}
         stateControllers={{state1, setState1, state2, setState2}} 
       /> */}
-        <LLMTailwind
+        {/* <LLMTailwind
           instructions="Build me a simple UI that displays the user's details in a nice card. Add a button so we can toggle large and small version."
           data={userData}
           stateControllers={{toggle, setToggle}}
-        />
+        /> */}
+        <Todo />
       </Content>
     </Layout> 
   )

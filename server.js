@@ -63,6 +63,57 @@ app.post('/api/llm-render-tailwind', async (req, res) => {
   }
 });
 
+app.post('/api/llm-orchestrate', async (req, res) => {
+  try {
+    const { input, context, availableActions } = req.body;    
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: `You are a UI orchestrator that thinks about complete user experiences. Based on user input and context, determine the sequence of actions needed to provide a polished interaction.
+
+Return a JSON response with an array of actions in the format: 
+{
+  "actions": [
+    {
+      "function": "functionName",
+      "args": any relevant arguments
+    }
+  ]
+}
+
+Only use functions from the provided availableActions object. Consider UI state cleanup like closing modals and clearing inputs after operations.
+
+Example sequences:
+- Adding a todo: [
+    {"function": "addTodo", "args": "todo name"},
+    {"function": "setNewTodo", "args": ""},
+    {"function": "closeModal", "args": {}}
+  ]
+- Opening modal: [
+    {"function": "setNewTodo", "args": ""},
+    {"function": "openModal", "args": {}}
+  ]
+`
+        },
+        {
+          role: "user",
+          content: `User input: ${input}
+Available actions: ${JSON.stringify(availableActions)}
+Current context: ${JSON.stringify(context)}`
+        }
+      ],
+      response_format: { type: "json_object" }
+    });
+      
+    res.json(JSON.parse(completion.choices[0].message.content));
+  } catch (error) {
+    console.error('OpenAI API Error:', error);
+    res.status(500).json({ error: 'Failed to process the request' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Backend server running on http://localhost:${port}`);
 }); 
