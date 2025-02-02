@@ -43,7 +43,7 @@ import {
   Grid,
   
 } from 'antd';
-import { useLLMPage } from './useLLMPage';
+import { useLLMRenderer } from './useLLMRenderer';
 const { Title, Text, Paragraph, Link } = Typography;
 const { Header, Footer, Sider, Content } = Layout;
 const { Item: FormItem } = Form;
@@ -128,9 +128,9 @@ const componentMap = {
  * @param {object} data - Optional data to pass to the LLM and also to the rendered UI.
  * @param {object} stateControllers - E.g. { value, setValue, ... }
  */
-export function LLMPage({ instructions, data, stateControllers = {} }) {
+export function LLMRenderer({ instructions, data, stateControllers = {} }) {
   // The hook returns a JSON-based UI tree, plus a refetch method if needed
-  const { uiTree, loading, error } = useLLMPage(instructions, data, stateControllers);
+  const { uiTree, loading, error } = useLLMRenderer(instructions, data, stateControllers);
 
   if (loading) return <div>Loading UI...</div>;
   if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;

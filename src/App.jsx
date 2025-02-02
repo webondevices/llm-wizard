@@ -3,7 +3,7 @@ import { Layout } from "antd";
 
 const { Header, Content, Footer } = Layout;
 import './App.css'
-import { LLMPage } from './LLMPage/LLMPage';
+import { LLMRenderer } from './LLMRenderer/LLMRenderer';
 import { LLMTailwind } from './LLMTailwind/LLMTailwind';
 
 import "tailwindcss/index.css";
@@ -22,7 +22,7 @@ function App() {
     <Layout style={{ width: "500px"}}>
       <Header style={{ color: "white", textAlign: "center" }}>LLM Component Experiment</Header>
       <Content style={{ padding: "20px" }}>
-      {/* <LLMPage
+      {/* <LLMRenderer
         instructions="Create a card component in a nice pink shade, with a button that "
         data={{}}
         stateControllers={{state1, setState1, state2, setState2}} 

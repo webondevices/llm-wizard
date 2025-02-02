@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 
 /**
- * useLLMPage(instructions, data, stateControllers)
+ * useLLMRenderer(instructions, data, stateControllers)
  * 1) Sends instructions + current data/state to your back-end LLM endpoint.
  * 2) Receives a JSON-based UI tree to render.
  */
-export function useLLMPage(instructions, data, stateControllers) {
+export function useLLMRenderer(instructions, data, stateControllers) {
   const [uiTree, setUiTree] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); 
