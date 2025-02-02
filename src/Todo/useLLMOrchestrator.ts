@@ -1,8 +1,8 @@
-// useLLMCommander.js
+// useLLMOrchestrator.js
 import { useEffect, useRef } from 'react';
 import { ActionConfig } from './Todo';
 
-export const useLLMCommander = ({ states, actions }: { 
+export const useLLMOrchestrator = ({ states, actions }: { 
   states: any;
   actions: Record<string, ActionConfig>;
 }) => {

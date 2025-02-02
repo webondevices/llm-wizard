@@ -1,7 +1,8 @@
 import React, { useState } from 'react'; 
-import { useLLMCommander } from './useLLMCommander';
+
 import Modal from './Modal';
 import { Card, List, Button, Input } from 'antd';
+import { useLLMOrchestrator } from './useLLMOrchestrator';
 
 interface Todo {
   id: string;
@@ -28,7 +29,7 @@ const Todo = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
 
-  const { handleInput } = useLLMCommander({
+  const { handleInput } = useLLMOrchestrator({
     states: { modalOpen, todos, newTodo },
     actions: {
       openModal: {
@@ -64,10 +65,6 @@ const Todo = () => {
     } as TodoActions,
   });
 
-  const onUserAction = (userInput: string) => {
-    handleInput(userInput);
-  };
-
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <div className="space-y-4">
@@ -92,13 +89,13 @@ const Todo = () => {
         />
         <Button 
           type="primary"
-          onClick={() => onUserAction('open the modal')}
+          onClick={() => handleInput('open the modal')}
         >
           Add Todo
         </Button>
       </div>
 
-      <Modal isOpen={modalOpen} onClose={() => onUserAction('close the modal')}>
+      <Modal isOpen={modalOpen} onClose={() => handleInput('close the modal')}>
         <div className="space-y-4">
           <h2 className="text-xl font-bold">Add New Todo</h2>
           <Input
@@ -108,7 +105,7 @@ const Todo = () => {
           />
           <Button
             type="primary"
-            onClick={() => onUserAction(`add todo: ${newTodo}`)}
+            onClick={() => handleInput(`add todo: ${newTodo}`)}
           >
             Add
           </Button>
