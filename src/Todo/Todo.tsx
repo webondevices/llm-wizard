@@ -1,10 +1,12 @@
 import React, { useState } from 'react'; 
 import { useLLMCommander } from './useLLMCommander';
 import Modal from './Modal';
+import { Card, List, Button, Input } from 'antd';
 
 interface Todo {
   id: string;
   name: string;
+  completed: boolean;
 }
 
 export interface ActionConfig {
@@ -18,6 +20,7 @@ interface TodoActions {
   closeModal: ActionConfig;
   addTodo: ActionConfig;
   setNewTodo: ActionConfig;
+  toggleTodo: ActionConfig;
 }
 
 const Todo = () => {
@@ -39,13 +42,24 @@ const Todo = () => {
       addTodo: {
         fn: (todoName: string) => setTodos(prev => [...prev, { 
           id: crypto.randomUUID(), 
-          name: todoName 
+          name: todoName,
+          completed: false
         }]),
         description: "Adds a new todo item to the list with the specified name"
       },
       setNewTodo: {
         fn: (text: string) => setNewTodo(text),
         description: "Updates the new todo input field with the provided text"
+      },
+      toggleTodo: {
+        fn: (todoId: string) => setTodos(prev => 
+          prev.map(todo => 
+            todo.id === todoId 
+              ? { ...todo, completed: !todo.completed }
+              : todo
+          )
+        ),
+        description: "Toggles the completion status of a todo item"
       },
     } as TodoActions,
   });
@@ -55,43 +69,52 @@ const Todo = () => {
   };
 
   return (
-    <div className="p-4">
+    <Card className="w-full max-w-2xl mx-auto">
       <div className="space-y-4">
-        <button 
+        <List
+          dataSource={todos}
+          renderItem={(todo) => (
+            <List.Item
+              actions={[
+                <Button
+                  type={todo.completed ? "default" : "primary"}
+                  onClick={() => handleInput(`toggle todo: ${todo.id}`)}
+                >
+                  {todo.completed ? 'Completed' : 'Mark Complete'}
+                </Button>
+              ]}
+            >
+              <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                {todo.name}
+              </span>
+            </List.Item>
+          )}
+        />
+        <Button 
+          type="primary"
           onClick={() => onUserAction('open the modal')}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Add Todo
-        </button>
-
-        <ul className="space-y-2">
-          {todos.map((todo) => (
-            <li key={todo.id} className="p-2 bg-gray-100 rounded">
-              {todo.name}
-            </li>
-          ))}
-        </ul>
+        </Button>
       </div>
 
       <Modal isOpen={modalOpen} onClose={() => onUserAction('close the modal')}>
         <div className="space-y-4">
           <h2 className="text-xl font-bold">Add New Todo</h2>
-          <input
-            type="text"
+          <Input
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
-            className="w-full border p-2 rounded"
             placeholder="Enter your todo"
           />
-          <button
+          <Button
+            type="primary"
             onClick={() => onUserAction(`add todo: ${newTodo}`)}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
           >
             Add
-          </button>
+          </Button>
         </div>
       </Modal>
-    </div>
+    </Card>
   );
 };
 

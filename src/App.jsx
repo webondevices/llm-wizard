@@ -19,7 +19,7 @@ function App() {
   };
 
   return (
-    <Layout>
+    <Layout style={{ width: "500px"}}>
       <Header style={{ color: "white", textAlign: "center" }}>LLM Component Experiment</Header>
       <Content style={{ padding: "20px" }}>
       {/* <LLMPage
